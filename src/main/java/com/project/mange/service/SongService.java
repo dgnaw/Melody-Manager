@@ -52,6 +52,12 @@ public class SongService {
         return songs.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 
+    public SongResponseDTO getSongById(Long id) {
+        Song song = songRepo.findById(id).
+                orElseThrow(() -> new RuntimeException("Không tìm thấy bài hát"));
+        return convertToDTO(song);
+    }
+
     public SongResponseDTO addSong(SongRequestDTO requestDTO){
         Genre genre = genreRepo.findById(requestDTO.getGenreId()).
                 orElseThrow(() -> new RuntimeException("Không tìm thấy thể loại ID: " + requestDTO.getGenreId()));
@@ -72,6 +78,29 @@ public class SongService {
         Song saveSong = songRepo.save(song);
         return convertToDTO(saveSong);
 
+    }
+
+    public SongResponseDTO updateSong(Long id, SongRequestDTO requestDTO){
+        Song existingSong = songRepo.findById(id).
+                orElseThrow(() -> new RuntimeException("Không tìm thấy bài hát để sửa!"));
+
+        existingSong.setTitle(requestDTO.getTitle());
+        existingSong.setArtist(requestDTO.getArtist());
+        existingSong.setAudioUrl(requestDTO.getAudioUrl());
+        existingSong.setCoverImage(requestDTO.getCoverImage());
+        if (!existingSong.getGenre().getId().equals(requestDTO.getGenreId())) {
+            Genre newGenre = genreRepo.findById(requestDTO.getGenreId())
+                    .orElseThrow(() -> new RuntimeException("Genre mới không tồn tại!"));
+            existingSong.setGenre(newGenre);
+        }
+        return convertToDTO(songRepo.save(existingSong));
+    }
+
+    public void deleteSong(Long id){
+        if(!songRepo.existsById(id)){
+            throw new RuntimeException("Bài hát không tồn tại!");
+        }
+        songRepo.deleteById(id);
     }
 
 }

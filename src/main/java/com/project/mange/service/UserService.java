@@ -6,12 +6,17 @@ import com.project.mange.dto.UserResponseDTO;
 import com.project.mange.model.User;
 import com.project.mange.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class UserService {
     @Autowired
     private UserRepo userRepo;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public UserResponseDTO convertToDTO(User user) {
         UserResponseDTO dto = new UserResponseDTO();
@@ -34,9 +39,13 @@ public class UserService {
         User newUser = new User();
         newUser.setUsername(request.getUsername());
         newUser.setEmail(request.getEmail());
-        newUser.setPassword(request.getPassword());
+        newUser.setPassword(passwordEncoder.encode(request.getPassword()));
         newUser.setFullName(request.getFullName());
-        newUser.setRole("USER");
+        if (request.getRole() != null && !request.getRole().isEmpty()) {
+            newUser.setRole(request.getRole());
+        } else {
+            newUser.setRole("USER");
+        }
 
         User savedUser = userRepo.save(newUser);
 
@@ -45,7 +54,7 @@ public class UserService {
 
     public UserResponseDTO loginUser(UserLoginDTO request){
         User user = userRepo.findByUsername(request.getUsername());
-        if (user != null && user.getPassword().equals(request.getPassword())){
+        if (user != null && passwordEncoder.matches(request.getPassword(), user.getPassword())){
             return convertToDTO(user);
         }
         return null;

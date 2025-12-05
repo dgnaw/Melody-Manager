@@ -17,4 +17,6 @@ public class UserRegisterDTO {
     @Email(message = "Email không được để trống")
     private String email;
     private String fullName;
+
+    private String role;
 }
