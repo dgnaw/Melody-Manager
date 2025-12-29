@@ -9,6 +9,7 @@ public class SongResponseDTO {
     private Long id;
     private String title;
     private String artist;
+    private String duration;
     private String audioUrl;
     private String coverImage;
     private LocalDate releaseDate;

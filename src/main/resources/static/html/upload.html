@@ -1,0 +1,38 @@
+<input type="file" id="fileInput" hidden multiple>
+
+<div class="upload-section-wrapper" style="width: 100%; height: 100%; display: flex; justify-content: center; align-items: center;">
+
+    <div class="upload-box">
+
+        <div id="viewEmpty" class="upload-view-empty">
+            <div class="dashed-border-box" id="dropAreaEmpty">
+                <div class="record-icon-wrapper">
+                    <i class="fa-solid fa-compact-disc fa-spin" style="animation-duration: 10s;"></i>
+                </div>
+                <button class="btn-choose-brown" onclick="document.getElementById('fileInput').click()">
+                    Choose a file
+                </button>
+                <p class="drag-text">or drag and drop a file</p>
+            </div>
+        </div>
+
+        <div id="viewFiles" class="upload-view-files" style="display: none;">
+            <button id="btnStartUpload" class="btn-start-upload" onclick="submitFiles()">
+                Start Upload (0)
+            </button>
+            <p class="drag-text-small">Sẵn sàng tải lên hệ thống</p>
+
+            <div class="file-list-area" id="dropAreaFiles">
+                <div id="uploadedFilesRow" class="files-row"></div>
+
+                <div class="add-more-box" onclick="document.getElementById('fileInput').click()">
+                    <div class="add-icon-circle">
+                        <i class="fa-solid fa-plus"></i>
+                    </div>
+                    <span>Add more</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

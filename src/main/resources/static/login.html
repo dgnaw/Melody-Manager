@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In - Melody</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+<div class="auth-overlay">
+  <div class="auth-card">
+    <div class="auth-logo">
+      <i class="fa-brands fa-evernote"></i> </div>
+
+    <h2 class="auth-heading">Sign in</h2>
+    <p class="auth-subtitle">to continue to your Melody account.</p>
+
+      <form onsubmit="handleLogin(event)" class="auth-form">
+        <input type="text" id="loginUsername" placeholder="Username" class="auth-input">
+
+        <input type="password" id="loginPassword" placeholder="Password" class="auth-input">
+
+        <button type="submit" class="btn-continue-gray">Continue</button>
+      </form>
+
+    <div class="auth-divider">or</div>
+
+    <div id="google-login-btn-container" class="google-btn-wrapper"></div>
+
+    <div class="auth-footer-links">
+      <p>Don't have an account? <a href="register.html">Sign up</a></p>
+      <p>Can't sign in? <a href="#">Click here</a></p>
+    </div>
+  </div>
+</div>
+
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script src="js/login.js"></script>
+
+</body>
+</html>

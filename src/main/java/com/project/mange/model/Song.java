@@ -16,7 +16,8 @@ public class Song {
     @Column(nullable = false)
     private String title;
     private String artist;
-
+    @Column(name = "duration")
+    private String duration;
     private String audioUrl; // link file nhac
     private String coverImage; // link anh bia
 

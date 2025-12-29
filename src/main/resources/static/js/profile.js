@@ -1,0 +1,110 @@
+// --- static/js/profile.js ---
+
+// 1. Cấu hình API
+if (typeof API_BASE_URL === 'undefined') {
+    var API_BASE_URL = 'http://localhost:8080/api';
+}
+
+// 2. Chạy khi trang load
+document.addEventListener("DOMContentLoaded", () => {
+    // Lấy user từ localStorage
+    const user = JSON.parse(localStorage.getItem('currentUser'));
+
+    // Nếu chưa đăng nhập -> Đuổi về login
+    if (!user) {
+        window.location.href = 'login.html';
+        return;
+    }
+
+    // Điền dữ liệu vào form
+    document.getElementById('profileFullName').value = user.fullName || "";
+    document.getElementById('profileEmail').value = user.email || "";
+
+    // Hiển thị avatar hiện tại (nếu có)
+    if (user.avatar) {
+        // Kiểm tra xem avatar có phải link full (http) hay link tương đối
+        let avatarSrc = user.avatar;
+        if (!avatarSrc.startsWith('http')) {
+            // BASE_URL được khai báo ở main.js, nếu chưa có thì hardcode tạm
+            const baseUrl = typeof BASE_URL !== 'undefined' ? BASE_URL : 'http://localhost:8080';
+            avatarSrc = `${baseUrl}${user.avatar}`;
+        }
+        document.getElementById('profileAvatar').src = avatarSrc;
+    }
+});
+
+// 3. Hàm xem trước ảnh khi vừa chọn (Preview)
+function previewAvatar(input) {
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById('profileAvatar').src = e.target.result;
+        }
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
+// 4. Xử lý Lưu thay đổi (QUAN TRỌNG: Đã sửa sang FormData)
+async function handleSaveProfile(event) {
+    event.preventDefault();
+
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    if (!currentUser || !currentUser.id) {
+        alert("Lỗi session! Vui lòng đăng nhập lại.");
+        return;
+    }
+
+    // Lấy dữ liệu từ form
+    const newFullName = document.getElementById('profileFullName').value;
+    const avatarInput = document.getElementById('avatarInput');
+    const avatarFile = avatarInput.files[0]; // File ảnh thực sự
+
+    // --- TẠO FORM DATA (Thay vì JSON) ---
+    const formData = new FormData();
+    formData.append('fullName', newFullName);
+
+    // Chỉ gửi avatar nếu người dùng có chọn ảnh mới
+    if (avatarFile) {
+        formData.append('avatar', avatarFile);
+    }
+
+    // Gọi API Backend
+    try {
+        const response = await fetch(`${API_BASE_URL}/users/${currentUser.id}`, {
+            method: 'PUT',
+            body: formData
+            // LƯU Ý: Khi dùng FormData, KHÔNG được set 'Content-Type': 'application/json'
+            // Browser sẽ tự động set 'multipart/form-data'
+        });
+
+        if (response.ok) {
+            // 1. Backend trả về thông tin user mới nhất
+            const updatedUser = await response.json();
+
+            // 2. Cập nhật lại localStorage
+            currentUser.fullName = updatedUser.fullName;
+
+            // Nếu có avatar mới thì cập nhật
+            if (updatedUser.avatar) {
+                currentUser.avatar = updatedUser.avatar;
+            }
+
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+
+            alert("Cập nhật thành công!");
+            window.location.href = 'index.html'; // Chỉ chuyển trang khi thành công
+        } else {
+            // Nếu lỗi, hiện tin nhắn từ Backend gửi về
+            const errorText = await response.text();
+            throw new Error(errorText);
+        }
+    } catch (e) {
+        console.error(e);
+        alert("Lỗi cập nhật: " + e.message);
+        // KHÔNG chuyển trang ở đây để người dùng biết lỗi
+    }
+}
+
+function goBack() {
+    window.location.href = 'index.html';
+}

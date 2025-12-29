@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Melody App</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="app-container">
+    <div class="sidebar">
+        <div class="logo">
+            <div class="logo-icon"><i class="fa-solid fa-music"></i></div>
+            <h2>MELODY</h2>
+        </div>
+        <div class="menu">
+            <a href="#" class="menu-item active" onclick="loadPage('home')">
+                <i class="fa-solid fa-house"></i> Home
+            </a>
+            <a href="#" class="menu-item" onclick="loadPage('library')">
+                <i class="fa-solid fa-book-open"></i> Library
+            </a>
+            <a href="#" class="menu-item" onclick="loadPage('upload')">
+                <i class="fa-solid fa-cloud-arrow-up"></i> Upload
+            </a>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <header>
+            <h1 class="page-title" id="pageTitle">WELCOME BACK</h1>
+            <div id="guest-nav" class="auth-buttons">
+                <a href="login.html" target="_blank" class="btn-auth-primary" style="text-decoration: none; display: inline-block; line-height: normal;">Log in</a>
+            </div>
+            <div id="user-nav" class="user-profile" style="display: none;">
+                <div class="notification-wrapper" onclick="toggleNotification()">
+                    <i class="fa-solid fa-bell"></i>
+                    <span id="notif-badge" class="notif-badge">0</span>
+                    <div id="notif-dropdown" class="notif-dropdown" onclick="event.stopPropagation()">
+                        <div class="notif-header">
+                            <span>Notification</span>
+                            <span class="btn-clear-notif" onclick="clearAllNotifications()">Clear All</span>
+                        </div>
+                        <div id="notif-list" class="notif-list">
+                            <div class="empty-notif">No notification</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="avatar"><img src="https://i.pravatar.cc/150?img=11" id="userAvatar"></div>
+                <div class="user-dropdown-wrapper" onclick="toggleUserDropdown()">
+                    <span class="username" id="userNameDisplay">Name</span>
+                    <i class="fa-solid fa-chevron-down"></i>
+
+                    <div class="dropdown-menu" id="userDropdown">
+                        <a href="profile.html" class="dropdown-item">
+                            <i class="fa-regular fa-user"></i> Profile
+                        </a>
+                        <a href="#" class="dropdown-item">
+                            <i class="fa-solid fa-gear"></i> Settings
+                        </a>
+                        <div class="divider"></div>
+                        <a href="#" class="dropdown-item logout" onclick="handleLogout(event)">
+                            <i class="fa-solid fa-arrow-right-from-bracket"></i> Log out
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div id="content-area"></div>
+    </div>
+</div>
+
+<div class="music-player" id="musicPlayer">
+    <div class="song-info-bar">
+        <div class="thumb-bar" id="playerThumb"></div>
+        <div class="text-bar">
+            <h4 id="playerTitle">Choose a song</h4>
+            <p id="playerArtist">Melody App</p>
+        </div>
+    </div>
+
+    <div class="control-part">
+        <div class="control-buttons">
+            <i class="fa-solid fa-backward-step" id="btnPrev"></i>
+            <div class="play-btn-circle" id="btnPlayPause">
+                <i class="fa-solid fa-play" id="iconPlay"></i>
+            </div>
+            <i class="fa-solid fa-forward-step" id="btnNext"></i>
+        </div>
+        <div class="progress-container">
+            <span id="currentTime">0:00</span>
+            <input type="range" id="progress" value="0" max="100">
+            <span id="durationTime">0:00</span>
+        </div>
+    </div>
+
+    <div class="volume-part">
+        <i class="fa-solid fa-volume-high" id="volumeIcon"></i>
+        <input type="range" id="volume" value="100" max="100">
+    </div>
+
+    <audio id="mainAudio"></audio>
+</div>
+
+<script src="js/home.js"></script>
+<script src="js/library.js"></script>
+<script src="js/upload.js"></script>
+<script src="js/profile.js"></script>
+<script src="js/main.js"></script>
+
+</body>
+</html>

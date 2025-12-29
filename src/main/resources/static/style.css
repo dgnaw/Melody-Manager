@@ -1,0 +1,1243 @@
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
+/* --- BIẾN MÀU SẮC (THEME) --- */
+:root {
+    --bg-color: #e0e0e0;
+    --card-bg: hsl(180, 4%, 16%);      /* Xanh rêu đậm (Background Body) */
+    --sidebar-bg: #2e3235;             /* Xanh xám tối (Sidebar) */
+    --upload-box-bg: #675029;          /* Màu nâu (Khung Upload) */
+    --active-color: #B5A575;           /* Vàng đất */
+    --accent-orange: #C76E43;          /* Cam đất */
+    --btn-blue: #5865F2;               /* Xanh tím (Nút Start Upload) */
+    --text-white: #ffffff;
+    --text-quote: #CFC8A0;             /* Vàng nhạt */
+}
+
+
+/* --- RESET CƠ BẢN --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background-color: var(--card-bg);
+    height: 100vh;
+    overflow: hidden; /* Ẩn thanh cuộn của trình duyệt */
+}
+
+/* --- BỐ CỤC CHÍNH (APP CONTAINER) --- */
+.app-container {
+    width: 100%;
+    height: 100vh;
+    background-color: var(--card-bg);
+    display: flex;
+}
+
+/* --- 1. SIDEBAR (THANH BÊN TRÁI) --- */
+.sidebar {
+    width: 300px; /* Chiều rộng cố định */
+    background-color: var(--sidebar-bg);
+    display: flex;
+    flex-direction: column;
+    padding: 40px 30px;
+    border-right: 1px solid rgba(255,255,255,0.05);
+    justify-content: space-between;
+    flex-shrink: 0;
+}
+
+.logo {
+    text-align: center;
+    color: var(--text-white);
+    margin-bottom: 50px;
+}
+
+.logo-icon {
+    background: #fff;
+    color: #333;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto 15px;
+    font-size: 28px;
+}
+
+.logo h2 {
+    font-family: 'Playfair Display', serif;
+    letter-spacing: 2px;
+    font-size: 22px;
+}
+
+.menu {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #ccc;
+    padding: 15px 25px;
+    border-radius: 30px;
+    transition: 0.3s;
+    font-size: 18px;
+    cursor: pointer;
+    font-family: 'Playfair Display', serif;
+
+}
+
+.menu-item i {
+    width: 30px;
+    margin-right: 15px;
+}
+
+.menu-item.active {
+    background-color: var(--active-color);
+    color: var(--text-white);
+    font-family: 'Playfair Display', serif;
+    font-weight: bold;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.menu-item:hover:not(.active) {
+    color: white;
+    background-color: rgba(255,255,255,0.1);
+}
+
+/* --- 2. MAIN CONTENT (NỘI DUNG CHÍNH) --- */
+.main-content {
+    flex-grow: 1;
+    padding: 30px 60px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow-y: auto; /* Cho phép cuộn nội dung nếu quá dài */
+    height: 100vh;
+
+    transition: padding-bottom 0.4s ease;
+}
+
+.main-content.has-player {
+    padding-bottom: 110px; /* Lúc này mới đẩy nội dung lên để né Player */
+}
+
+/* Header */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    padding-bottom: 20px;
+    min-height: 80px;
+}
+
+.welcome-text { /* Dành cho trang Home */
+    font-family: 'Impact', sans-serif;
+    font-size: 40px;
+    color: transparent;
+    -webkit-text-stroke: 1px #b33a27; /* Viền đỏ nâu */
+    letter-spacing: 3px;
+}
+
+.page-title { /* Dành cho trang Upload (Tiêu đề trắng) */
+    font-family: 'Impact', sans-serif;
+    font-size: 40px;
+    color: var(--text-white);
+    letter-spacing: 3px;
+}
+
+/* --- AUTH BUTTONS (Header) --- */
+.user-profile-area{
+    position: relative;
+}
+
+.auth-buttons{
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+
+.btn-auth-primary{
+    background-color: white;
+    color: black;
+    border: none;
+    padding: 10px 30px;
+    border-radius: 25px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 16px;
+    transition: transform 0.2s;
+}
+
+.btn-auth-primary:hover{
+    transform: scale(1.05);
+}
+
+/* --- PROFILE --- */
+.profile-card {
+    background-color: #282828;
+    padding: 40px;
+    border-radius: 20px;
+    width: 400px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+.profile-card h2 { color: white; margin-bottom: 20px; }
+
+.profile-avatar-upload {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 30px;
+}
+.profile-avatar-upload img {
+    width: 100%; height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #5865F2;
+}
+.camera-icon {
+    position: absolute;
+    bottom: 0; right: 0;
+    background: #5865F2;
+    color: white;
+    width: 35px; height: 35px;
+    border-radius: 50%;
+    display: flex; justify-content: center; align-items: center;
+    cursor: pointer;
+    border: 2px solid #282828;
+}
+
+.form-group { text-align: left; margin-bottom: 25px; }
+.form-group label { color: #bbb; display: block; margin-bottom: 8px; font-size: 14px; }
+.form-group input {
+    width: 100%;
+    padding: 12px;
+    background: #333;
+    border: 1px solid #444;
+    border-radius: 8px;
+    color: white;
+    outline: none;
+}
+
+.btn-save-profile {
+    width: 100%;
+    padding: 12px;
+    background-color: #5865F2;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+.btn-cancel-profile {
+    width: 100%;
+    padding: 12px;
+    background-color: transparent;
+    color: #bbb;
+    border: none;
+    cursor: pointer;
+}
+.btn-cancel-profile:hover { color: white; }
+
+/* --- AVATAR --- */
+#userAvatar{
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #fff;
+    cursor: pointer;
+}
+
+#user-nav{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#user-nav i{
+    color: #fff;
+}
+
+#userNameDisplay{
+    font-weight: 600;
+    font-size: 14px;
+    color: #fff;
+    max-width: 150px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* --- DROPDOWN MENU --- */
+.user-dropdown-wrapper{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    position: relative;
+}
+
+.dropdown-menu{
+    position: absolute;
+    top: 150%;
+    right: 0;
+    width: 200px;
+    background-color: #282828;
+    border-radius: 8px;
+    padding: 5px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    display: none;
+    flex-direction: column;
+    z-index: 1000;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+.dropdown-menu.show{
+    display: flex;
+}
+
+.dropdown-item{
+    padding: 12px 15px;
+    color: #e0e0e0;
+    text-decoration: none;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-radius: 4px;
+    transition: background 0.2s;
+}
+
+
+.dropdown-item:hover{
+    background-color: rgba(255,255,255,0.1);
+}
+
+.dropdown-item.logout{
+    color: #ff5555;
+}
+
+.divider{
+    height: 1px;
+    background-color: rgba(255,255,255,0.1);
+    margin: 5px 0;
+}
+
+/* --- CSS CHO TRANG LOGIN GIỐNG EVERNOTE --- */
+
+/* Wrapper che toàn màn hình */
+.auth-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f8f8f8; /* Nền xám rất nhạt */
+}
+
+/* Hộp Login */
+.auth-card {
+    background-color: white;
+    width: 450px; /* Rộng hơn chút cho giống mẫu */
+    padding: 50px 40px;
+    border-radius: 4px; /* Bo góc ít hơn */
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; /* Font giống Evernote */
+}
+
+/* Logo */
+.auth-logo {
+    font-size: 50px;
+    color: #00a82d; /* Màu xanh Evernote */
+    margin-bottom: 10px;
+}
+
+/* Tiêu đề */
+.auth-heading {
+    font-size: 32px;
+    font-weight: 700; /* Đậm */
+    color: #2a2a2a;
+    margin-bottom: 5px;
+    font-family: 'Merriweather', serif; /* Hoặc font có chân nếu muốn giống hệt */
+}
+
+.auth-subtitle {
+    font-size: 16px;
+    color: #4a4a4a;
+    margin-bottom: 30px;
+}
+
+/* Input Form */
+.auth-form {
+    margin-bottom: 20px;
+}
+
+.auth-input {
+    width: 100%;
+    padding: 15px;
+    font-size: 18px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.auth-input:focus {
+    border-color: #00a82d; /* Focus màu xanh */
+}
+
+/* Nút Continue MÀU XÁM (Giống ảnh) */
+.btn-continue-gray {
+    width: 100%;
+    padding: 15px;
+    background-color: #cccccc; /* Màu xám */
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-continue-gray:hover {
+    background-color: #b3b3b3;
+}
+
+/* Divider "or" */
+.auth-divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: #9b9b9b;
+    font-size: 14px;
+    margin: 20px 0;
+}
+
+.auth-divider::before, .auth-divider::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid #e1e1e1;
+}
+
+.auth-divider::before { margin-right: 10px; }
+.auth-divider::after { margin-left: 10px; }
+
+/* Container nút Google */
+.google-btn-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+
+/* Footer Links */
+.auth-footer-links {
+    font-size: 14px;
+    color: #737373;
+    line-height: 1.6;
+}
+
+.auth-footer-links a {
+    color: #00a82d; /* Link màu xanh */
+    text-decoration: none;
+}
+
+.auth-footer-links a:hover {
+    text-decoration: underline;
+}
+
+/* --- TRANG HOME --- */
+.hero-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+    gap: 100px;
+}
+
+.record-player {
+    position: relative;
+    width: 350px;
+    height: 350px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.record-icon {
+    font-size: 350px;
+    color: #000;
+}
+
+.needle-arm {
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    width: 14px;
+    height: 120px;
+    background: #4c3a3a;
+    transform: rotate(-30deg);
+    border-radius: 8px;
+    transform-origin: top center;
+}
+
+.hero-text {
+    max-width: 500px;
+    text-align: left;
+}
+
+.quote {
+    color: var(--text-quote);
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+    margin-bottom: 40px;
+    line-height: 1.6;
+    font-style: italic;
+}
+
+@keyframes spinDisc {
+    from{ transform: rotate(0deg);}
+    to{ transform: rotate(360deg);}
+}
+
+.record-icon.spinning{
+    animation: spinDisc 3s linear infinite;
+}
+
+/* Footer Socials */
+.socials {
+    display: flex;
+    justify-content: center;
+    gap: 60px;
+    margin-top: auto;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-top: 20px;
+    padding-bottom: 10px;
+}
+
+.social-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #ccc;
+    font-size: 14px;
+    cursor: pointer;
+    position: relative;
+}
+
+.social-item i {
+    font-size: 28px;
+    color: #fff;
+    margin-bottom: 8px;
+}
+
+.social-item:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    right: -30px;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 40px;
+    width: 1px;
+    background-color: rgba(255,255,255,0.3);
+}
+
+/* --- TRANG UPLOAD (STYLE CHUẨN) --- */
+
+.upload-section-wrapper {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 20px;
+}
+
+/* 1. Hộp nền xám to (Outer Box) */
+.upload-box {
+    background-color: #E6E6E6;
+    width: 100%;
+    max-width: 900px;
+    min-width: 800px;
+    height: 500px;
+    border-radius: 40px;
+    padding: 25px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+    position: relative;
+}
+
+/* 2. Container bao quanh View Empty */
+.upload-view-empty {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* 3. Khung nét đứt (Inner Dashed Box) */
+.dashed-border-box {
+    width: 100%;
+    height: 100%;
+    border: 2px dashed #555; /* Viền nét đứt màu tối */
+    border-radius: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    transition: background 0.2s, border-color 0.2s;
+}
+
+.dashed-border-box.drag-over {
+    background-color: rgba(53, 63, 60, 0.5);
+    border-color: #3c5555;
+}
+
+/* Icon Đĩa than */
+.record-icon-wrapper {
+    font-size: 140px;
+    color: #000; /* Icon màu đen */
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+/* Nút chọn file */
+.btn-choose-brown {
+    background-color: #C19A6B; /* Màu nâu vàng */
+    color: white;
+    border: none;
+    padding: 15px 50px;
+    font-size: 18px;
+    border-radius: 30px;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    font-style: italic;
+    box-shadow: 0 5px 15px rgba(193, 154, 107, 0.4);
+    transition: transform 0.2s;
+}
+
+.btn-choose-brown:hover {
+    background-color: #a8855a;
+    transform: translateY(-2px);
+}
+
+.drag-text {
+    font-size: 14px;
+    font-style: italic;
+    color: #444; /* Chữ màu tối */
+}
+
+/* --- VIEW 2: HAS FILES (Giao diện danh sách file) --- */
+.upload-view-files {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 40px; /* Đẩy nội dung xuống một chút */
+}
+
+/* Nút Start Transcription (Màu xanh dương giống ảnh mẫu) */
+.btn-start-upload {
+    background-color: #5b58f2; /* Màu xanh Discord/Ảnh mẫu */
+    color: white;
+    border: none;
+    padding: 15px 60px;
+    border-radius: 12px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(88, 101, 242, 0.3);
+    margin-bottom: 15px;
+    transition: transform 0.2s;
+}
+
+.btn-start-upload:hover {
+    transform: translateY(-2px);
+    background-color: #4752c4;
+}
+
+.drag-text-small {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 30px;
+}
+
+/* Khu vực chứa File và nút Add More */
+.file-list-area {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap; /* Cho phép xuống dòng nếu nhiều file */
+    justify-content: center; /* Căn giữa các file */
+    gap: 20px; /* Khoảng cách giữa các ô */
+    overflow-y: auto; /* Cho phép cuộn nếu danh sách quá dài */
+    padding: 10px;
+}
+
+.files-row {
+    display: contents; /* Giúp các file con nằm cùng cấp với nút Add more */
+}
+
+/* Thẻ File (File Card) */
+.file-card-item {
+    width: 120px;
+    height: 120px;
+    background: white;
+    border-radius: 12px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    border: 1px solid #eee;
+}
+
+/* Icon hoặc ảnh thumb của file */
+.file-thumb {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    margin-bottom: 10px;
+}
+
+.file-name-mini {
+    font-size: 11px;
+    color: #333;
+    text-align: center;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-weight: 500;
+}
+
+/* Nút xóa file (X) */
+.btn-delete-mini {
+    position: absolute;
+    top: -8px; right: -8px;
+    background: #ff5555;
+    color: white;
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    display: flex; justify-content: center; align-items: center;
+    font-size: 12px; cursor: pointer;
+    border: 2px solid white;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+/* Nút ADD MORE (Hình vuông nét đứt màu xanh) */
+.add-more-box {
+    width: 120px;
+    height: 120px;
+    border: 2px dashed #5865F2; /* Viền nét đứt xanh */
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    background-color: rgba(88, 101, 242, 0.05); /* Nền xanh rất nhạt */
+    transition: all 0.2s;
+}
+
+.add-more-box:hover {
+    background-color: rgba(88, 101, 242, 0.1);
+}
+
+.add-icon-circle {
+    width: 30px;
+    height: 30px;
+    background-color: #5865F2;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.add-more-box span {
+    font-size: 12px;
+    color: #5865F2;
+    font-weight: 600;
+}
+
+/* --- LIBRARY PAGE STYLES --- */
+
+.library-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 1. Controls (Search & Genre) */
+.library-controls {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+}
+
+.search-bar {
+    background-color: rgba(255, 255, 255, 0.2); /* Nền mờ */
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+    border-radius: 25px;
+    width: 300px;
+}
+
+.search-bar i {
+    color: #ccc;
+    margin-right: 10px;
+}
+
+.search-bar input {
+    background: transparent;
+    border: none;
+    outline: none;
+    color: white;
+    width: 100%;
+    font-family: 'Poppins', sans-serif;
+}
+
+.search-bar input::placeholder {
+    color: #ccc;
+    font-style: italic;
+}
+
+.btn-genre {
+    background-color: #ddd;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* 2. Song List */
+.song-list {
+    flex-grow: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.song-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-radius: 15px;
+    transition: background 0.2s;
+    color: var(--text-white);
+}
+
+.song-item:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.song-index {
+    width: 40px;
+    font-size: 14px;
+    color: #ccc;
+    text-align: center;
+}
+
+.song-thumb {
+    width: 50px;
+    height: 50px;
+    background-color: #d9d9d9; /* Màu xám placeholder như ảnh */
+    border-radius: 12px;
+    margin: 0 20px;
+    background-size: cover;
+    background-position: center;
+}
+
+.song-info {
+    flex-grow: 1;
+}
+
+.song-info h4 {
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 2px;
+}
+
+.song-info p {
+    font-size: 12px;
+    color: #bbb;
+}
+
+.song-time {
+    width: 60px;
+    text-align: right;
+    font-size: 14px;
+    color: #ddd;
+    margin-right: 30px;
+}
+
+.song-actions {
+    display: flex;
+    gap: 20px;
+    color: #888;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.song-actions i:hover {
+    color: white;
+}
+
+.song-options{
+    position: relative;
+    cursor: pointer;
+    padding: 0 10px;
+}
+
+.song-options i{
+    color: #b3b3b3;
+    padding: 8px;
+    border-radius: 50%;
+    transition: background 0.3s;
+}
+
+.song-options i:hover{
+    background-color: #333;
+    color: #fff;
+}
+
+.action-menu{
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 30px;
+    background-color: #282828;
+    min-width: 150px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    border-radius: 4px;
+    z-index: 100;
+    overflow: hidden;
+}
+
+.action-menu.show{
+    display: block;
+}
+
+.action-item{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 15px;
+    color: #e0e0e0;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.action-item:hover{
+    background-color: #3e3e3e;
+    color: #fff;
+}
+
+.action-item.delete{
+    color: #ff5e5e;
+}
+
+/* 3. Pagination */
+/* --- Pagination Style --- */
+.pagination-container {
+    display: flex;
+    justify-content: center; /* Căn giữa */
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+    padding-bottom: 30px;
+}
+
+.pagination-btn {
+    background-color: #e0e0e0; /* Màu xám sáng */
+    color: #333;               /* Chữ đen */
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s;
+    min-width: 35px;
+}
+
+.pagination-btn:hover {
+    background-color: #d0d0d0;
+}
+
+.pagination-btn.active {
+    background-color: #282828; /* Màu đen khi được chọn */
+    color: #fff;               /* Chữ trắng */
+}
+
+.pagination-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+/* --- MUSIC PLAYER BAR --- */
+.music-player {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 90px;
+    background-color: #2e3235; /* Màu nền tối (hoặc #947F73 nếu thích màu nâu như ảnh mẫu) */
+    border-top: 1px solid rgba(255,255,255,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 30px;
+    z-index: 1000; /* Đè lên tất cả */
+    box-shadow: 0 -5px 20px rgba(0,0,0,0.5);
+    transform: translateY(100%);
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.music-player.active {
+    transform: translateY(0); /* Đưa về vị trí cũ */
+}
+
+/* 1. Góc trái: Info */
+.song-info-bar {
+    display: flex;
+    align-items: center;
+    width: 25%;
+    gap: 15px;
+}
+.thumb-bar {
+    width: 60px;
+    height: 60px;
+    border-radius: 8px;
+    background-color: #555;
+    background-size: cover;
+    background-position: center;
+}
+.text-bar h4 {
+    color: white;
+    font-size: 14px;
+    margin-bottom: 3px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 150px;
+}
+.text-bar p {
+    color: #bbb;
+    font-size: 12px;
+}
+.icons-bar i {
+    color: #bbb;
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+/* 2. Ở giữa: Controls */
+.control-part {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 50%;
+}
+.control-buttons {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+    margin-bottom: 8px;
+}
+.control-buttons i {
+    color: #ccc;
+    font-size: 18px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.control-buttons i:hover { color: white; }
+
+.play-btn-circle {
+    width: 40px; height: 40px;
+    background-color: white;
+    border-radius: 50%;
+    display: flex; justify-content: center; align-items: center;
+    color: black !important; /* Icon play màu đen */
+}
+.play-btn-circle i { color: black !important; font-size: 16px; margin-left: 2px; }
+
+/* Thanh chạy (Progress Bar) */
+.progress-container {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    gap: 10px;
+    font-size: 12px;
+    color: #ccc;
+}
+input[type="range"] {
+    width: 100%;
+    height: 4px;
+    background: #555;
+    border-radius: 2px;
+    cursor: pointer;
+    accent-color: #fff; /* Màu thanh kéo */
+}
+
+/* 3. Góc phải: Volume */
+.volume-part {
+    display: flex;
+    align-items: center;
+    width: 25%;
+    justify-content: flex-end;
+    gap: 10px;
+    color: #fff;
+}
+.volume-part input {
+    width: 80px;
+}
+
+/* --- THÊM MỚI VÀO CUỐI FILE --- */
+#content-area {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    /* Quan trọng: Để con bên trong (home-wrapper) tính toán chiều cao đúng */
+    min-height: 0;
+    height: 100%;
+}
+
+.home-wrapper{
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+/* --- HIỂN THỊ THÔNG BÁO --- */
+.notification-wrapper{
+    position: relative;
+    cursor: pointer;
+    margin-right: 15px;
+}
+
+.notification-wrapper i{
+    font-size: 1.2rem;
+    color: #fff;
+    transition: color 0.3s;
+}
+
+.notification-wrapper i:hover{
+    color: #1db954;
+}
+
+.notif-badge{
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: red;
+    color: white;
+    font-size: 10px;
+    font-weight: bold;
+    padding: 2px 5px;
+    border-radius: 50%;
+    display: none;
+}
+
+.notif-dropdown{
+    position: absolute;
+    top: 30px;
+    right: -10px;
+    width: 300px;
+    background-color: #282828;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    display: none;
+    z-index: 1000;
+    overflow: hidden;
+}
+
+.notif-dropdown.show{
+    padding: 10px 15px;
+    border-bottom: 1px solid #3e3e3e;
+    font-weight: bold;
+    font-size: 14px;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+}
+
+.btn-clear-notif{
+    font-size: 14px;
+    color: #b3b3b3;
+    cursor: pointer;
+}
+
+.btn-clear-notif:hover{ color: #fff;}
+
+.notif-list{
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.notif-item{
+    padding: 10px 15px;
+    border-bottom: 1px solid #333;
+    font-size: 13px;
+    color: #ccc;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.notif-item:hover{
+    background-color: #333;
+}
+
+.notif-item.unread{
+    background-color: #2a2a2a;
+    border-left: 3px solid #1db954;
+    color: white;
+}
+
+.notif-item i{
+    font-size: 14px;
+    color: #1db954;
+}
+
+.empty-notif{
+    padding: 20px;
+    text-align: center;
+    color: #777;
+    font-size: 13px;
+}

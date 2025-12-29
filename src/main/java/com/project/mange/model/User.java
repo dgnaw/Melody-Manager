@@ -26,6 +26,8 @@ public class User {
 
     private String role;
 
+    private String avatar;
+
     @OneToMany(mappedBy = "uploader", cascade = CascadeType.ALL)
     private List<Song> uploadedSongs;
 }

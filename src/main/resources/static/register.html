@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Melody App</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+<div class="auth-overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; background-color: #f0f2f5;">
+    <div class="auth-card">
+        <div class="auth-logo">
+            <i class="fa-solid fa-music"></i>
+        </div>
+
+        <h2>Create Account</h2>
+        <p class="auth-subtitle">Join Melody Manager today.</p>
+
+        <form onsubmit="handleRegister(event)" class="auth-form">
+
+            <input type="text" id="regFullName" placeholder="Full Name" required class="auth-input">
+
+            <input type="text" id="regUsername" placeholder="Username" required class="auth-input">
+
+            <input type="email" id="regEmail" placeholder="Email address" required class="auth-input">
+
+            <input type="password" id="regPassword" placeholder="Password" required class="auth-input">
+
+            <button type="submit" class="btn-continue-gray">Sign Up</button>
+        </form>
+
+        <div class="auth-divider">or</div>
+
+        <div id="google-register-btn-container" class="google-btn-wrapper"></div>
+
+        <div class="auth-footer-text">
+            Already have an account? <a href="login.html">Log in</a>
+        </div>
+    </div>
+</div>
+
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script src="js/register.js"></script>
+
+</body>
+</html>
