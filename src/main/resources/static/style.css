@@ -406,7 +406,7 @@ header {
 .btn-continue-gray {
     width: 100%;
     padding: 15px;
-    background-color: #cccccc; /* Màu xám */
+    background-color: #00a82d; /* Màu xám */
     color: white;
     font-size: 18px;
     font-weight: bold;
@@ -460,6 +460,15 @@ header {
 }
 
 .auth-footer-links a:hover {
+    text-decoration: underline;
+}
+
+.auth-footer-text a{
+    color: #00a82d;
+    text-decoration: none;
+}
+
+.auth-footer-text a:hover{
     text-decoration: underline;
 }
 
@@ -881,6 +890,10 @@ header {
     margin: 0 20px;
     background-size: cover;
     background-position: center;
+}
+
+.song-thumb:hover{
+    cursor: pointer;
 }
 
 .song-info {

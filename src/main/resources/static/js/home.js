@@ -26,14 +26,4 @@ function initHomePage() {
             }
         });
     }
-
-    // Xử lý click vào Social Media (nếu muốn mở tab mới bằng JS)
-    const socialItems = document.querySelectorAll('.social-item');
-    socialItems.forEach(item => {
-        item.addEventListener('click', function() {
-            const platform = this.querySelector('span').innerText;
-            console.log("Đã click vào: " + platform);
-            // window.open('https://facebook.com/...', '_blank');
-        });
-    });
 }

@@ -30,7 +30,5 @@ public class Song {
     @JsonIgnore
     private User uploader;
 
-    @ManyToOne
-    @JoinColumn(name = "genre_id")
-    private Genre genre;
+
 }

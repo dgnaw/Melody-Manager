@@ -17,8 +17,17 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Điền dữ liệu vào form
-    document.getElementById('profileFullName').value = user.fullName || "";
-    document.getElementById('profileEmail').value = user.email || "";
+    const usernameInput = document.getElementById('profileUsername');
+    if (usernameInput) {
+        // Nếu username chưa có (null), fallback tạm về email để họ có cái mà sửa
+        usernameInput.value = user.username || user.email || "";
+    }
+
+    // 2. Ô Email (Chỉ đọc): Lấy user.email
+    const emailInput = document.getElementById('profileEmail');
+    if (emailInput) {
+        emailInput.value = user.email || "";
+    }
 
     // Hiển thị avatar hiện tại (nếu có)
     if (user.avatar) {
@@ -55,13 +64,13 @@ async function handleSaveProfile(event) {
     }
 
     // Lấy dữ liệu từ form
-    const newFullName = document.getElementById('profileFullName').value;
+    const newUsername = document.getElementById('profileUsername').value;
     const avatarInput = document.getElementById('avatarInput');
     const avatarFile = avatarInput.files[0]; // File ảnh thực sự
 
     // --- TẠO FORM DATA (Thay vì JSON) ---
     const formData = new FormData();
-    formData.append('fullName', newFullName);
+    formData.append('username', newUsername);
 
     // Chỉ gửi avatar nếu người dùng có chọn ảnh mới
     if (avatarFile) {
@@ -72,7 +81,8 @@ async function handleSaveProfile(event) {
     try {
         const response = await fetch(`${API_BASE_URL}/users/${currentUser.id}`, {
             method: 'PUT',
-            body: formData
+            body: formData,
+            headers: {'Authorization' : `Bearer ${currentUser.token}`,}
             // LƯU Ý: Khi dùng FormData, KHÔNG được set 'Content-Type': 'application/json'
             // Browser sẽ tự động set 'multipart/form-data'
         });
@@ -82,7 +92,7 @@ async function handleSaveProfile(event) {
             const updatedUser = await response.json();
 
             // 2. Cập nhật lại localStorage
-            currentUser.fullName = updatedUser.fullName;
+            currentUser.username = updatedUser.username;
 
             // Nếu có avatar mới thì cập nhật
             if (updatedUser.avatar) {

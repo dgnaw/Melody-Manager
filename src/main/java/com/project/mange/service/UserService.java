@@ -14,6 +14,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -33,14 +34,14 @@ public class UserService {
         return dto;
     }
 
-    public UserResponseDTO loginOrRegisterGoogle(UserGGDTO request) {
+    public User loginOrRegisterGoogle(UserGGDTO request) {
         // 1. Kiểm tra xem email đã tồn tại chưa
         // (Giả sử bạn có hàm findByEmail trong UserRepo, nếu chưa thì thêm vào UserRepo nhé)
-        User existingUser = userRepo.findByEmail(request.getEmail());
+        Optional<User> existingUser = userRepo.findByEmail(request.getEmail());
 
-        if (existingUser != null) {
+        if (existingUser.isPresent()) {
             // A. Đã tồn tại -> Trả về thông tin user đó (Login)
-            return convertToDTO(existingUser);
+            return existingUser.get();
         } else {
             // B. Chưa tồn tại -> Tạo user mới (Register)
             User newUser = new User();
@@ -48,14 +49,18 @@ public class UserService {
             newUser.setFullName(request.getFullName());
             newUser.setAvatar(request.getAvatar());
 
-            // Username lấy luôn là email (hoặc cắt phần trước @)
-            newUser.setUsername(request.getEmail());
+            String email = request.getEmail();
+            String generatedUsername = email.substring(0, email.indexOf("@"));
 
-            // Password để ngẫu nhiên hoặc trống (vì dùng Google login không cần pass)
-            newUser.setPassword("");
+            if(userRepo.findByUsername(generatedUsername) != null) {
+                generatedUsername = generatedUsername + "_" + System.currentTimeMillis(); // ví dụ: nam.nguyen_170123123
+            }
+
+            newUser.setUsername(generatedUsername);
+            newUser.setPassword(passwordEncoder.encode("GOOGLE_LOGIN_NP_PASSWORD"));
 
             User savedUser = userRepo.save(newUser);
-            return convertToDTO(savedUser);
+            return savedUser;
         }
     }
 
@@ -63,7 +68,7 @@ public class UserService {
         if (userRepo.findByUsername(request.getUsername())!= null){
             throw new RuntimeException("Tên đăng nhập đã tồn tại!");
         }
-        if (userRepo.findByEmail(request.getEmail()) != null){
+        if (userRepo.findByEmail(request.getEmail()).isPresent()){
             throw new RuntimeException("Email đã sử dụng!");
         }
 
@@ -91,14 +96,25 @@ public class UserService {
         return null;
     }
 
-    public UserResponseDTO updateUser(Long userId, String fullName, MultipartFile avatarFile) throws IOException {
+    public UserResponseDTO updateUser(Long userId, String newUsername, MultipartFile avatarFile) throws IOException {
         User user = userRepo.findById(userId).orElseThrow(
                 () -> new RuntimeException("User không tồn tại!"));
 
         // 1. Cập nhật tên (nếu có)
-        if (fullName != null && !fullName.trim().isEmpty()) {
-            user.setFullName(fullName.trim());
+        if (newUsername != null && !newUsername.trim().isEmpty()) {
+            // Loại bỏ khoảng trắng thừa
+            String cleanUsername = newUsername.trim();
+
+            // Chỉ xử lý nếu username mới KHÁC username cũ
+            if (!cleanUsername.equals(user.getUsername())) {
+                // Kiểm tra xem username mới đã có ai dùng chưa
+                if (userRepo.findByUsername(cleanUsername) != null) {
+                    throw new RuntimeException("Tên đăng nhập (Username) này đã được sử dụng!");
+                }
+                user.setUsername(cleanUsername);
+            }
         }
+
 
         // 2. Cập nhật avatar (nếu có gửi file)
         if (avatarFile != null && !avatarFile.isEmpty()) {

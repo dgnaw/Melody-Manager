@@ -55,7 +55,6 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // --- 3. HÀM CHUYỂN TRANG (SPA ROUTER) ---
-// Lưu ý: Không còn case 'login' hay 'register' nữa vì đã tách thành trang riêng
 function loadPage(pageName) {
     const protectedPages = ['library', 'upload', 'profile'];
 
@@ -139,7 +138,7 @@ function checkLoginStatus() {
         if(guestNav) guestNav.style.display = 'none';
         if(userNav) userNav.style.display = 'flex';
 
-        if(userNameDisplay) userNameDisplay.innerText = user.fullName || "User";
+        if(userNameDisplay) userNameDisplay.innerText = user.username || "User";
         if(userAvatar) userAvatar.src = user.avatar ? user.avatar : DEFAULT_AVATAR;
     } else {
         // CHƯA ĐĂNG NHẬP: Hiện nút Login
@@ -167,19 +166,11 @@ function handleLogout(event) {
     checkLoginStatus();
 
     // Quay về trang chủ (hoặc chuyển sang login.html nếu muốn bắt buộc đăng nhập)
-    loadPage('home');
+    window.location.href = 'login.html';
 
     alert("Đã đăng xuất thành công!");
 }
 
-// Đóng dropdown khi click ra ngoài
-window.addEventListener('click', function(e) {
-    const wrapper = document.querySelector('.user-dropdown-wrapper');
-    const dropdown = document.getElementById('userDropdown');
-    if (wrapper && dropdown && !wrapper.contains(e.target)) {
-        dropdown.classList.remove('show');
-    }
-});
 
 // --- 5. LOGIC PLAYER ---
 
@@ -398,3 +389,12 @@ function clearAllNotifications(){
     renderNotifications();
 }
 
+
+// Đóng dropdown khi click ra ngoài
+window.addEventListener('click', function(e) {
+    const wrapper = document.querySelector('.user-dropdown-wrapper');
+    const dropdown = document.getElementById('userDropdown');
+    if (wrapper && dropdown && !wrapper.contains(e.target)) {
+        dropdown.classList.remove('show');
+    }
+});

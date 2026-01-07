@@ -15,7 +15,10 @@ async function initLibraryPage() {
 
 async function fetchSongs(page){
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    if (!currentUser) return;
+    if (!currentUser || !currentUser.token) {
+        console.error("Thiếu Token! Vui lòng đăng nhập lại.");
+        return;
+    }
 
     isFetching = true;
 
@@ -24,7 +27,13 @@ async function fetchSongs(page){
         if (currentKeyword) {
             url += `&keyword=${encodeURIComponent(currentKeyword)}`;
         }
-        const response = await fetch(url);
+        const response = await fetch(url,{
+            method: 'GET',
+            headers: {
+                'Authorization' : `Bearer ${currentUser.token}`,
+                'Content-Type' : 'application/json'
+            }
+        });
         if (response.ok){
             const data = await response.json();
             const songs = data.content;
@@ -42,7 +51,13 @@ async function fetchSongs(page){
 
             renderPaginationButtons();
         }else{
-            console.error("Lỗi tải danh sách từ Server");
+            if (response.status === 401 || response.status === 403) {
+                alert("Phiên đăng nhập hết hạn. Vui lòng đăng nhập lại!");
+                localStorage.removeItem('currentUser');
+                window.location.href = 'login.html';
+            } else {
+                console.error("Lỗi server:", response.status);
+            }
         }
     }catch (error){
         console.error("Lỗi kết nối:", error)

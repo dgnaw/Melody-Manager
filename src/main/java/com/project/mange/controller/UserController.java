@@ -17,10 +17,10 @@ public class UserController {
     @PutMapping("/{id}")
     public ResponseEntity<?> updateUser(
             @PathVariable Long id,
-            @RequestParam(value = "fullName", required = false) String fullName,
+            @RequestParam(value = "username", required = false) String username,
             @RequestParam(value = "avatar", required = false) MultipartFile avatar) {
         try {
-            UserResponseDTO updatedUser = userService.updateUser(id, fullName, avatar);
+            UserResponseDTO updatedUser = userService.updateUser(id, username, avatar);
             return ResponseEntity.ok(updatedUser);
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body("Lỗi Server: " + e.getMessage());

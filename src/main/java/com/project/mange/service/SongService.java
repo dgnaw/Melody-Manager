@@ -4,10 +4,8 @@ import com.mpatric.mp3agic.ID3v2;
 import com.mpatric.mp3agic.Mp3File;
 import com.project.mange.dto.SongRequestDTO;
 import com.project.mange.dto.SongResponseDTO;
-import com.project.mange.model.Genre;
 import com.project.mange.model.Song;
 import com.project.mange.model.User;
-import com.project.mange.repository.GenreRepo;
 import com.project.mange.repository.SongRepo;
 import com.project.mange.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,9 +38,6 @@ public class SongService {
     @Autowired
     private UserRepo userRepo;
 
-    @Autowired
-    private GenreRepo genreRepo;
-
     // Đường dẫn thư mục lưu file (Ngang hàng với file pom.xml)
     private final Path uploadLocation = Paths.get("uploads");
 
@@ -72,9 +67,6 @@ public class SongService {
         songDTO.setViews(song.getViews());
         songDTO.setDuration(song.getDuration());
 
-        if (song.getGenre() != null) {
-            songDTO.setGenreName(song.getGenre().getName());
-        }
         if (song.getUploader() != null) {
             songDTO.setUploaderName(song.getUploader().getFullName());
         }
@@ -206,13 +198,6 @@ public class SongService {
         }
         if (requestDTO.getCoverImage() != null && !requestDTO.getCoverImage().isEmpty()) {
             existingSong.setCoverImage(requestDTO.getCoverImage());
-        }
-
-        // Update Genre
-        if (requestDTO.getGenreId() != null) {
-            Genre newGenre = genreRepo.findById(requestDTO.getGenreId())
-                    .orElseThrow(() -> new RuntimeException("Genre không tồn tại!"));
-            existingSong.setGenre(newGenre);
         }
 
         return convertToDTO(songRepo.save(existingSong));
