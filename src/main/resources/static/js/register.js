@@ -1,7 +1,5 @@
 // --- static/js/register.js ---
-if (typeof API_BASE_URL === 'undefined') {
-    var API_BASE_URL = 'http://localhost:8080/api';
-}
+const API_BASE_URL = window.location.origin + "/api";
 // CLIENT ID (Phải giống bên login.js)
 const GOOGLE_CLIENT_ID_REG = "346688855682-03o2g4bd3dc4c2b2b4sl6s6vakeiukbv.apps.googleusercontent.com";
 

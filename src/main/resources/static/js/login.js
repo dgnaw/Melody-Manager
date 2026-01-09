@@ -1,7 +1,7 @@
 // --- static/js/login.js ---
 
 // 1. CẤU HÌNH API
-const API_BASE_URL = 'http://localhost:8080/api';
+const API_BASE_URL = window.location.origin + "/api";
 const GOOGLE_CLIENT_ID = "346688855682-03o2g4bd3dc4c2b2b4sl6s6vakeiukbv.apps.googleusercontent.com";
 
 // 2. KHỞI TẠO KHI TRANG LOAD
