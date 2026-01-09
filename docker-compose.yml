@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  # 1. Database PostgreSQL
+  db:
+    image: postgres:15-alpine
+    container_name: melody_db
+    environment:
+      POSTGRES_DB: ${DB_NAME}      # Tên Database
+      POSTGRES_USER: ${DB_USER}       # User
+      POSTGRES_PASSWORD: ${DB_PASSWORD}     # Password
+    ports:
+      - "5432:5432"               # Để bạn dùng DBeaver kết nối vào kiểm tra
+    volumes:
+      - postgres_data:/var/lib/postgresql/data # Giữ lại dữ liệu khi tắt Docker
+
+  # 2. App của bạn (Backend + Frontend tích hợp)
+  app:
+    build: .                      # Build từ thư mục hiện tại chứa Dockerfile
+    container_name: melody_app
+    ports:
+      - "8080:8080"               # Mở cổng web ra ngoài
+    depends_on:
+      - db                        # Chờ DB chạy xong mới chạy App
+    environment:
+      # Cấu hình đè lên file application.properties
+      # Quan trọng: 'db' ở đây là tên service database ở trên
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/${DB_NAME}
+      SPRING_DATASOURCE_USERNAME: ${DB_USER}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      JWT_SECRET: "x1v2/mX4zJhyI8hJvPlTMBbloEZd2iP4vvnke9jUgr4oMdbL8ThLEJRrjbkkt2yJpDFTZ9XL6vZ8Ixk94LcSeQ=="
+      JWT_EXPIRATION: 60480000
+
+volumes:
+  postgres_data:
