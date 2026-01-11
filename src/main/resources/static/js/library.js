@@ -1,4 +1,7 @@
 // --- static/js/library.js ---
+if (!window.API_BASE_URL) {
+    window.API_BASE_URL = window.location.origin + '/api';
+}
 let currentPage = 0;
 const pageSize = 5;
 let totalPages = 0;
@@ -23,7 +26,7 @@ async function fetchSongs(page){
     isFetching = true;
 
     try{
-        let url = `${API_BASE_URL}/songs?userId=${currentUser.id}&page=${page}&size=${pageSize}`;
+        let url = `${window.API_BASE_URL}/songs?userId=${currentUser.id}&page=${page}&size=${pageSize}`;
         if (currentKeyword) {
             url += `&keyword=${encodeURIComponent(currentKeyword)}`;
         }
@@ -114,8 +117,8 @@ function renderSongList(songs) {
             if (song.coverImage.startsWith('http')) {
                 imageUrl = song.coverImage;
             } else {
-                // BASE_URL lấy từ main.js (http://localhost:8080)
-                imageUrl = `${BASE_URL}${song.coverImage}`;
+                const baseUrl = window.BASE_URL || window.location.origin;
+                imageUrl = `${baseUrl}${song.coverImage}`;
             }
         }
 
@@ -212,7 +215,7 @@ async function deleteSong(event, songId, songTitle){
     event.stopPropagation();
     if (!confirm(`Bạn có chắc muốn xóa bài hát: "${songTitle}" không?`)) return;
     try{
-        const response = await fetch(`${API_BASE_URL}/songs/${songId}`, {
+        const response = await fetch(`${window.API_BASE_URL}/songs/${songId}`, {
             method: 'DELETE'
         })
 

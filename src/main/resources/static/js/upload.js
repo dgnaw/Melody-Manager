@@ -1,6 +1,9 @@
 // --- static/js/upload.js ---
 
 // Đảm bảo biến này khớp với file main.js hoặc login.js
+if (!window.API_BASE_URL) {
+    window.API_BASE_URL = window.location.origin + '/api';
+}
 
 // --- BIẾN TOÀN CỤC ---
 let uploadedFiles = [];
@@ -180,7 +183,7 @@ async function submitFiles() {
         formData.append("userId", currentUser.id);
 
         try {
-            const response = await fetch(`${API_BASE_URL}/songs`, {
+            const response = await fetch(`${window.API_BASE_URL}/songs`, {
                 method: 'POST',
                 body: formData
             });

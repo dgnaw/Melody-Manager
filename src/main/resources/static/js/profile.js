@@ -1,10 +1,10 @@
 // --- static/js/profile.js ---
 
 // 1. Cấu hình API
-if (typeof API_BASE_URL === 'undefined') {
-    var API_BASE_URL = 'http://localhost:8080/api';
+if (!window.API_BASE_URL) {
+    window.API_BASE_URL = window.location.origin + '/api';
 }
-
+const BASE_URL = window.location.origin;
 // 2. Chạy khi trang load
 document.addEventListener("DOMContentLoaded", () => {
     // Lấy user từ localStorage
@@ -30,15 +30,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Hiển thị avatar hiện tại (nếu có)
-    if (user.avatar) {
-        // Kiểm tra xem avatar có phải link full (http) hay link tương đối
+    const avatarImg = document.getElementById('profileAvatar');
+    if (avatarImg && user.avatar) {
         let avatarSrc = user.avatar;
         if (!avatarSrc.startsWith('http')) {
-            // BASE_URL được khai báo ở main.js, nếu chưa có thì hardcode tạm
-            const baseUrl = typeof BASE_URL !== 'undefined' ? BASE_URL : 'http://localhost:8080';
-            avatarSrc = `${baseUrl}${user.avatar}`;
+            avatarSrc = `${BASE_URL}${user.avatar}`;
         }
-        document.getElementById('profileAvatar').src = avatarSrc;
+        avatarImg.src = avatarSrc;
     }
 });
 
@@ -79,7 +77,7 @@ async function handleSaveProfile(event) {
 
     // Gọi API Backend
     try {
-        const response = await fetch(`${API_BASE_URL}/users/${currentUser.id}`, {
+        const response = await fetch(`${window.API_BASE_URL}/users/${currentUser.id}`, {
             method: 'PUT',
             body: formData,
             headers: {'Authorization' : `Bearer ${currentUser.token}`,}

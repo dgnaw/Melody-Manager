@@ -1,10 +1,10 @@
 // --- static/js/main.js ---
-if (typeof API_BASE_URL === 'undefined') {
-    var API_BASE_URL = 'http://localhost:8080/api';
+if (!window.API_BASE_URL) {
+    window.API_BASE_URL = window.location.origin + '/api';
 }
 
-if (typeof BASE_URL === 'undefined') {
-    var BASE_URL = 'http://localhost:8080';
+if (!window.BASE_URL) {
+    window.BASE_URL = window.location.origin;
 }
 const DEFAULT_AVATAR = "https://i.pravatar.cc/150?img=11";
 
@@ -189,11 +189,11 @@ function playSongByIndex(index) {
 
     playerTitle.innerText = song.title;
     playerArtist.innerText = song.artist;
-    let imageUrl = song.coverImage ? `${BASE_URL}${song.coverImage}` : 'https://picsum.photos/50/50';
+    let imageUrl = song.coverImage ? `${window.BASE_URL}${song.coverImage}` : 'https://picsum.photos/50/50';
     playerThumb.style.backgroundImage = `url('${imageUrl}')`;
 
     if (song.audioUrl) {
-        audio.src = `${BASE_URL}${song.audioUrl}`;
+        audio.src = `${window.BASE_URL}${song.audioUrl}`;
         audio.play()
             .then(() => {
                 isPlaying = true;
